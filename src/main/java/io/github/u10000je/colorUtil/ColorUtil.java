@@ -1,4 +1,4 @@
-package com.manje.colorUtil;
+package io.github.u10000je.colorUtil;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;

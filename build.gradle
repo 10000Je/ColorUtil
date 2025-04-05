@@ -1,25 +1,53 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     id 'java'
-    id 'maven-publish'
+    id "com.vanniktech.maven.publish" version "0.28.0"
 }
 
-group = 'com.manje'
+group = 'io.github.u10000je'
 version = '1.0'
+
+mavenPublishing {
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+    signAllPublications()
+
+    coordinates("io.github.10000je", "ColorUtil", "1.0")
+
+    pom {
+        name = 'ColorUtil'
+        description = 'TextColor Convenience Library'
+        url = '<https://github.com/10000Je/ColorUtil>'
+
+        licenses {
+            license {
+                name = 'MIT licensse'
+                url = '<https://github.com/10000Je/ColorUtil/blob/main/LICENSE>'
+            }
+        }
+
+        developers {
+            developer {
+                id = '10000Je'
+                name = 'Kang Minje'
+                email = 'ssh030226@gmail.com'
+            }
+        }
+
+        scm {
+            connection = 'scm:git:github.com/10000Je/ColorUtil.git'
+            developerConnection = 'scm:git:ssh://github.com/10000Je/ColorUtil.git'
+            url = '<https://github.com/10000Je/ColorUtil/tree/main>'
+        }
+    }
+
+}
 
 repositories {
     mavenCentral()
     maven {
         name = 'papermc'
         url = 'https://repo.papermc.io/repository/maven-public/'
-    }
-}
-
-publishing {
-    publications {
-        create("mavenJava", MavenPublication) {
-            from components.java
-        }
-
     }
 }
 
