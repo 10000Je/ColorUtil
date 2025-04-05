@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'maven-publish'
 }
 
 group = 'com.manje'
@@ -10,6 +11,19 @@ repositories {
     maven {
         name = 'papermc'
         url = 'https://repo.papermc.io/repository/maven-public/'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = 'com.manje'
+            artifactId = 'ColorUtil'
+            version = '1.0'
+
+            from components.java
+        }
+
     }
 }
 
