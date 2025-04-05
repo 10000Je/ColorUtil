@@ -1,0 +1,137 @@
+package com.manje.colorUtil;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.*;
+
+import javax.annotation.Nullable;
+
+public class ColorUtil {
+
+    private static final String regex = "((?<=%1$s)|(?=%1$s))";
+
+    /**
+     * Translates color codes and formatting codes in a given message, applying them
+     * to the text to create a formatted component.
+     *
+     * @param delimiter the character used to denote the start of a color or formatting code
+     * @param message the input string containing the raw message with color or formatting codes
+     * @return a {@link Component} instance representing the formatted message with
+     *         the appropriate colors and decorations applied
+     */
+    public static Component translateColorCodes(char delimiter, String message) {
+        String[] list = message.split(String.format(regex, delimiter));
+        TextComponent.Builder textBuilder = Component.text();
+        boolean isColorCode = false;
+        TextColor color = null;
+        TextDecoration decoration = null;
+        for(String str : list) {
+            if(isColorCode) {
+                if(str.charAt(0) == '#') {
+                    if(str.length() < 7) {
+                        continue;
+                    }
+                    String hex = str.substring(1, 7);
+                    String content = str.substring(7);
+                    color = getTextColor(hex);
+                    textBuilder.append(Component.text(content, color, decoration));
+                }
+                else {
+                    char code = str.substring(0, 1).charAt(0);
+                    String content = str.substring(1);
+                    if(getTextColor(code) != null) {
+                        color = getTextColor(code);
+                    }
+                    if(getTextDecoration(code) != null) {
+                        decoration = getTextDecoration(code);
+                    }
+                    if(code == 'r') {
+                        color = null;
+                        decoration = null;
+                    }
+                    textBuilder.append(Component.text(content, color, decoration));
+                }
+                isColorCode = false;
+            }
+            else {
+                if(str.charAt(0) == '&') {
+                    isColorCode = true;
+                    continue;
+                }
+                textBuilder.append(Component.text(str, color, decoration));
+            }
+        }
+        return textBuilder.build();
+    }
+
+    /**
+     * Returns the corresponding {@link TextColor} for a given character code.
+     * The provided code should match predefined color codes. If the code does not match,
+     * the method returns null.
+     *
+     * @param code the character representing a specific color code
+     * @return the {@link TextColor} corresponding to the given code, or null if the code is invalid
+     */
+    @Nullable
+    public static TextColor getTextColor(char code) {
+        return switch(code) {
+            case '0' -> NamedTextColor.BLACK;
+            case '1' -> NamedTextColor.DARK_BLUE;
+            case '2' -> NamedTextColor.DARK_GREEN;
+            case '3' -> NamedTextColor.DARK_AQUA;
+            case '4' -> NamedTextColor.DARK_RED;
+            case '5' -> NamedTextColor.DARK_PURPLE;
+            case '6' -> NamedTextColor.GOLD;
+            case '7' -> NamedTextColor.GRAY;
+            case '8' -> NamedTextColor.DARK_GRAY;
+            case '9' -> NamedTextColor.BLUE;
+            case 'a' -> NamedTextColor.GREEN;
+            case 'b' -> NamedTextColor.AQUA;
+            case 'c' -> NamedTextColor.RED;
+            case 'd' -> NamedTextColor.LIGHT_PURPLE;
+            case 'e' -> NamedTextColor.YELLOW;
+            case 'f' -> NamedTextColor.WHITE;
+            default -> null;
+        };
+    }
+
+    /**
+     * Converts a hexadecimal string into a {@link TextColor} object.
+     * The input string should represent a valid hexadecimal color code.
+     * If the string does not represent a valid hexadecimal color code, null is returned.
+     *
+     * @param hex the hexadecimal string representing the color code
+     * @return the {@link TextColor} object corresponding to the color code, or null if the input is invalid
+     */
+    @Nullable
+    public static TextColor getTextColor(String hex) {
+        try {
+            int code = Integer.parseInt(hex, 16);
+            return TextColor.color(code);
+        }
+        catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the corresponding {@link TextDecoration} for a given character code.
+     * The provided code should match predefined decoration codes. If the code does not match,
+     * the method returns null.
+     *
+     * @param code the character representing a specific text decoration code
+     * @return the {@link TextDecoration} corresponding to the given code, or null if the code is invalid
+     */
+    @Nullable
+    public static TextDecoration getTextDecoration(char code) {
+        return switch(code) {
+            case 'k' -> TextDecoration.OBFUSCATED;
+            case 'l' -> TextDecoration.BOLD;
+            case 'm' -> TextDecoration.STRIKETHROUGH;
+            case 'n' -> TextDecoration.UNDERLINED;
+            case 'o' -> TextDecoration.ITALIC;
+            default -> null;
+        };
+    }
+
+}
