@@ -22,6 +22,9 @@ public class ColorUtil {
     public static Component translateColorCodes(char delimiter, String message) {
         String[] list = message.split(String.format(regex, delimiter));
         TextComponent.Builder textBuilder = Component.text();
+        if(message.isEmpty()) {
+            return textBuilder.build();
+        }
         boolean isColorCode = false;
         TextColor color = null;
         TextDecoration decoration = null;
@@ -34,13 +37,15 @@ public class ColorUtil {
                     String hex = str.substring(1, 7);
                     String content = str.substring(7);
                     color = getTextColor(hex);
-                    textBuilder.append(Component.text(content, color, decoration));
+                    decoration = null;
+                    textBuilder.append(getComponent(content, color, decoration));
                 }
                 else {
                     char code = str.substring(0, 1).charAt(0);
                     String content = str.substring(1);
                     if(getTextColor(code) != null) {
                         color = getTextColor(code);
+                        decoration = null;
                     }
                     if(getTextDecoration(code) != null) {
                         decoration = getTextDecoration(code);
@@ -49,7 +54,7 @@ public class ColorUtil {
                         color = null;
                         decoration = null;
                     }
-                    textBuilder.append(Component.text(content, color, decoration));
+                    textBuilder.append(getComponent(content, color, decoration));
                 }
                 isColorCode = false;
             }
@@ -58,10 +63,28 @@ public class ColorUtil {
                     isColorCode = true;
                     continue;
                 }
-                textBuilder.append(Component.text(str, color, decoration));
+                textBuilder.append(getComponent(str, color, decoration));
             }
         }
         return textBuilder.build();
+    }
+
+    /**
+     * Creates a {@link Component} with the specified text content, color, and optional text decoration.
+     * If no text decoration is provided (i.e., null), the component will only include the text and color.
+     *
+     * @param content the text content of the component
+     * @param color the {@link TextColor} to be applied to the text
+     * @param decoration the {@link TextDecoration} to be applied to the text, or null if no decoration is needed
+     * @return a {@link Component} instance with the specified text, color, and optional decoration
+     */
+    public static Component getComponent(String content, @Nullable TextColor color, @Nullable TextDecoration decoration) {
+        if(decoration == null) {
+            return Component.text(content, color);
+        }
+        else {
+            return Component.text(content, color, decoration);
+        }
     }
 
     /**
