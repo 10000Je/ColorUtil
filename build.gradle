@@ -16,11 +16,7 @@ repositories {
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            groupId = 'com.manje'
-            artifactId = 'ColorUtil'
-            version = '1.0'
-
+        create("mavenJava", MavenPublication) {
             from components.java
         }
 
