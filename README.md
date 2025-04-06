@@ -10,14 +10,14 @@ Paper 버킷의 TextColor 클래스를 편리하게 사용하게 해주는 라�
 <dependency>
     <groupId>io.github.10000je</groupId>
     <artifactId>ColorUtil</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
 ## 🐘 Gradle
 - - -
 ```
-implementation 'io.github.10000je:ColorUtil:1.0'
+implementation 'io.github.10000je:ColorUtil:1.0.1'
 ```
 
 ## 사용방법
