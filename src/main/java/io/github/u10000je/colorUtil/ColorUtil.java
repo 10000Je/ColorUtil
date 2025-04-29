@@ -5,10 +5,12 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.*;
 
 import javax.annotation.Nullable;
+import java.util.regex.Pattern;
 
 public class ColorUtil {
 
-    private static final String regex = "((?<=%1$s)|(?=%1$s))";
+    private static final String regex = "((?<=%1$c([0-9a-fk-or]|#[0-9a-fA-F]{6}))|(?=%1$c([0-9a-fk-or]|#[0-9a-fA-F]{6})))";
+    private static final String match = "%c([0-9a-fk-or]|#[0-9a-fA-F]{6})";
 
     /**
      * Translates color codes and formatting codes in a given message, applying them
@@ -22,47 +24,33 @@ public class ColorUtil {
     public static Component translateColorCodes(char delimiter, String message) {
         String[] list = message.split(String.format(regex, delimiter));
         TextComponent.Builder textBuilder = Component.text();
-        if(message.isEmpty()) {
+        if (message.isEmpty()) {
             return textBuilder.build();
         }
-        boolean isColorCode = false;
         TextColor color = null;
         TextDecoration decoration = null;
-        for(String str : list) {
-            if(isColorCode) {
-                if(str.charAt(0) == '#') {
-                    if(str.length() < 7) {
-                        continue;
-                    }
-                    String hex = str.substring(1, 7);
-                    String content = str.substring(7);
-                    color = getTextColor(hex);
+        for (String str : list) {
+            if (Pattern.matches(String.format(match, delimiter), str)) {
+                if (str.charAt(1) == '#') {
+                    color = getTextColor(str.substring(2));
                     decoration = null;
-                    textBuilder.append(getComponent(content, color, decoration));
                 }
                 else {
-                    char code = str.substring(0, 1).charAt(0);
-                    String content = str.substring(1);
-                    if(getTextColor(code) != null) {
+                    char code = str.charAt(1);
+                    if (getTextColor(code) != null) {
                         color = getTextColor(code);
                         decoration = null;
                     }
-                    if(getTextDecoration(code) != null) {
+                    if (getTextDecoration(code) != null) {
                         decoration = getTextDecoration(code);
                     }
-                    if(code == 'r') {
+                    if (code == 'r') {
                         color = null;
                         decoration = null;
                     }
-                    textBuilder.append(getComponent(content, color, decoration));
                 }
-                isColorCode = false;
             }
             else {
-                if(str.charAt(0) == '&') {
-                    isColorCode = true;
-                    continue;
-                }
                 textBuilder.append(getComponent(str, color, decoration));
             }
         }
