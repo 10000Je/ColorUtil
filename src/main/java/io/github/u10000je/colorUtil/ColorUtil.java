@@ -31,12 +31,12 @@ public class ColorUtil {
         TextDecoration decoration = null;
         for (String str : list) {
             if (Pattern.matches(String.format(match, delimiter), str)) {
-                if (str.charAt(1) == '#') {
-                    color = getTextColor(str.substring(2));
+                if (str.charAt(delimiter.length()) == '#') {
+                    color = getTextColor(str.substring(delimiter.length()+1));
                     decoration = null;
                 }
                 else {
-                    char code = str.charAt(1);
+                    char code = str.charAt(delimiter.length());
                     if (getTextColor(code) != null) {
                         color = getTextColor(code);
                         decoration = null;
