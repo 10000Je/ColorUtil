@@ -9,8 +9,8 @@ import java.util.regex.Pattern;
 
 public class ColorUtil {
 
-    private static final String regex = "((?<=%1$c([0-9a-fk-or]|#[0-9a-fA-F]{6}))|(?=%1$c([0-9a-fk-or]|#[0-9a-fA-F]{6})))";
-    private static final String match = "%c([0-9a-fk-or]|#[0-9a-fA-F]{6})";
+    private static final String regex = "((?<=%1$s([0-9a-fA-Fk-oK-OrR]|#[0-9a-fA-F]{6}))|(?=%1$s([0-9a-fA-Fk-oK-OrR]|#[0-9a-fA-F]{6})))";
+    private static final String match = "%s([0-9a-fA-Fk-oK-OrR]|#[0-9a-fA-F]{6})";
 
     /**
      * Translates color codes and formatting codes in a given message, applying them
@@ -21,7 +21,7 @@ public class ColorUtil {
      * @return a {@link Component} instance representing the formatted message with
      *         the appropriate colors and decorations applied
      */
-    public static Component translateColorCodes(char delimiter, String message) {
+    public static Component translateColorCodes(String delimiter, String message) {
         String[] list = message.split(String.format(regex, delimiter));
         TextComponent.Builder textBuilder = Component.text();
         if (message.isEmpty()) {
@@ -85,7 +85,7 @@ public class ColorUtil {
      */
     @Nullable
     public static TextColor getTextColor(char code) {
-        return switch(code) {
+        return switch(Character.toLowerCase(code)) {
             case '0' -> NamedTextColor.BLACK;
             case '1' -> NamedTextColor.DARK_BLUE;
             case '2' -> NamedTextColor.DARK_GREEN;

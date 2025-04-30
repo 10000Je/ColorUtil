@@ -10,24 +10,24 @@ Paper 버킷의 TextColor 클래스를 편리하게 사용하게 해주는 라�
 <dependency>
     <groupId>io.github.10000je</groupId>
     <artifactId>ColorUtil</artifactId>
-    <version>1.1</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
 ## 🐘 Gradle
 - - -
 ```
-implementation 'io.github.10000je:ColorUtil:1.1'
+implementation 'io.github.10000je:ColorUtil:1.1.0'
 ```
 
 ## 사용방법
 - - -
 ```
-ColorUtil.translateColorCodes(char delimiter, String message)
+ColorUtil.translateColorCodes(String delimiter, String message)
 ```
 - 기존의 버킷 라이브러리의 ChatColor와  유사하나, HexCode를 사용할 수 있습니다.
 - `{delimiter}#00ff00Hello World` 로 작성하는 것이 가능합니다.
-- 예를 들어, delimiter 를 '&'로 설정했다면, `&#00ff00Hello &cWorld.` 로 작성시 색깔이 적용됩니다.
+- 예를 들어, delimiter 를 "&"로 설정했다면, `&#00ff00Hello &cWorld.` 로 작성시 색깔이 적용됩니다.
 - 그 외 함수들은 소스코드를 참조해 주십시오.
 
 ## 주의사항
