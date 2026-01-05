@@ -1,4 +1,4 @@
-package io.github.u10000je.colorUtil;
+package io.manje.minecraft.colorutil;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
